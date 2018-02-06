@@ -87,10 +87,21 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
             let urlString = originalSize["url"] as! String
             // 4.
             let url = URL(string: urlString)
+            
             cell.photoView.af_setImage(withURL: url!)
 
         }
         return cell
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let vc = segue.destination as! PhotoDetailsViewController
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: cell)!
+        var someCell : PhotoCell = self.tableView.cellForRow(at: indexPath) as! PhotoCell
+        
+        vc.image = someCell.photoView.image
     }
 
 }
