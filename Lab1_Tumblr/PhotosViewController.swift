@@ -99,9 +99,13 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
         let vc = segue.destination as! PhotoDetailsViewController
         let cell = sender as! UITableViewCell
         let indexPath = tableView.indexPath(for: cell)!
-        var someCell : PhotoCell = self.tableView.cellForRow(at: indexPath) as! PhotoCell
+        let someCell : PhotoCell = self.tableView.cellForRow(at: indexPath) as! PhotoCell
         
         vc.image = someCell.photoView.image
     }
-
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        self.tableView.deselectRow(at: indexPath, animated: true)
+        
+    }
 }
