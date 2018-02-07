@@ -60,12 +60,12 @@
         <scene sceneID="64V-d6-pWW">
             <objects>
                 <viewController id="1XJ-JU-HGm" customClass="PhotoDetailsViewController" customModule="Lab1_Tumblr" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="MXs-7r-nnY" customClass="PhotosDetailViewController">
+                    <view key="view" contentMode="scaleToFill" id="MXs-7r-nnY">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a8b-Ug-efK">
-                                <rect key="frame" x="0.0" y="72" width="359" height="238"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="278"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.88235294119999996" green="0.34509803919999998" blue="0.16078431369999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </imageView>
