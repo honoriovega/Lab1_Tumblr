@@ -70,13 +70,13 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return posts.count
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PhotoCell") as! PhotoCell
         
-        let post = posts[indexPath.row]
+        let post = posts[indexPath.section]
         if let photos = post["photos"] as? [[String: Any]] {
             // photos is NOT nil, we can use it!
             // 1.
@@ -103,8 +103,46 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
         vc.image = cell.photoView.image
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
+        headerView.backgroundColor = UIColor(white: 1, alpha: 0.9)
+        
+        let profileView = UIImageView(frame: CGRect(x: 10, y: 10, width: 30, height: 30))
+        profileView.clipsToBounds = true
+        profileView.layer.cornerRadius = 15;
+        profileView.layer.borderColor = UIColor(white: 0.7, alpha: 0.8).cgColor
+        profileView.layer.borderWidth = 1;
+        
+        // Set the avatar
+        profileView.af_setImage(withURL: URL(string: "https://api.tumblr.com/v2/blog/humansofnewyork.tumblr.com/avatar")!)
+        headerView.addSubview(profileView)
+        
+        // Add a UILabel for the date here
+        // Use the section number to get the right URL
+        // let label = ...
+        
+        let label = UILabel(frame: CGRect(x: 50, y: 15, width: 250, height: 30))
+       
+        let dateString = posts[section]["date"] as! String
+        label.text = dateString
+        headerView.addSubview(label)
+
+        return headerView
+
+    }
+    
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         self.tableView.deselectRow(at: indexPath, animated: true)
         
     }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return posts.count
+    }
+    
 }
