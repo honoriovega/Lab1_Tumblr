@@ -1,41 +1,39 @@
 //
-//  PhotoDetailsViewController.swift
+//  FullScreenPhotoViewController.swift
 //  Lab1_Tumblr
 //
-//  Created by Honorio Vega on 2/5/18.
+//  Created by Honorio Vega on 2/7/18.
 //  Copyright © 2018 Honorio Vega. All rights reserved.
 //
 
 import UIKit
 
-class PhotoDetailsViewController: UIViewController {
+class FullScreenPhotoViewController: UIViewController,
+UIScrollViewDelegate{
+    @IBOutlet weak var scrollView: UIScrollView!
     
-    var image: UIImage!
-
     @IBOutlet weak var imageView: UIImageView!
-    
+    var cookie : String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageView.image = image
-        imageView.isUserInteractionEnabled = true
-
-        // Do any additional setup after loading the view.
+        scrollView.delegate = self
+       // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    @IBAction func openModal(_ sender: UITapGestureRecognizer) {
+    @IBAction func dismissModal(_ sender: UIButton) {
         
-        let vc = FullScreenPhotoViewController()
-        vc.cookie = "watican"
-        
-        print("booi")
-        performSegue(withIdentifier: "firstSegue", sender: nil)
+        self.presentingViewController?.dismiss(animated: false, completion:nil)
+
     }
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
+    }
+
     /*
     // MARK: - Navigation
 
