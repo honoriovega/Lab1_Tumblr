@@ -10,6 +10,10 @@ import UIKit
 
 class FullScreenPhotoViewController: UIViewController,
 UIScrollViewDelegate{
+    
+    
+    var image : UIImage!
+    
     @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var imageView: UIImageView!
@@ -18,6 +22,7 @@ UIScrollViewDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.delegate = self
+        imageView.image = image
        // Do any additional setup after loading the view.
     }
 

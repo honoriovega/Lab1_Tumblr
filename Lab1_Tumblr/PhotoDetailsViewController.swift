@@ -28,6 +28,14 @@ class PhotoDetailsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let vc = segue.destination as! FullScreenPhotoViewController
+        
+        vc.image = self.imageView.image
+        
+    }
+    
     @IBAction func openModal(_ sender: UITapGestureRecognizer) {
         
         let vc = FullScreenPhotoViewController()
