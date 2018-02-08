@@ -9,8 +9,15 @@
 import UIKit
 import AlamofireImage
 
-class PhotosViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class PhotosViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
+UIScrollViewDelegate{
     
+    var isMoreDataLoading = false
+    var loadingMoreView:InfiniteScrollActivityView?
+
+    // keep track to request more posts
+    var offset = 0
+
     var posts : [[String : Any]] = []
     var refreshControl : UIRefreshControl!
 
@@ -19,6 +26,17 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
          super.viewDidLoad()
 
+        
+        // Set up Infinite Scroll loading indicator
+        let frame = CGRect(x: 0, y: tableView.contentSize.height, width: tableView.bounds.size.width, height: InfiniteScrollActivityView.defaultHeight)
+        loadingMoreView = InfiniteScrollActivityView(frame: frame)
+        loadingMoreView!.isHidden = true
+        tableView.addSubview(loadingMoreView!)
+        
+        var insets = tableView.contentInset
+        insets.bottom += InfiniteScrollActivityView.defaultHeight
+        tableView.contentInset = insets
+        
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(PhotosViewController.didPullToRefresh(_:)), for: .valueChanged)
         
@@ -35,10 +53,19 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
         fetchPictures()
     }
     
-    func fetchPictures() {
+    func fetchPictures(requestingMoreData : Bool = false) {
         
         // Network request snippet
-        let url = URL(string: "https://api.tumblr.com/v2/blog/humansofnewyork.tumblr.com/posts/photo?api_key=Q6vHoaVm5L1u2ZAW1fqv3Jw48gFzYVg9P0vH0VHl3GVy6quoGV")!
+        //requestingMoreData
+        var urlString = "https://api.tumblr.com/v2/blog/humansofnewyork.tumblr.com/posts/photo?api_key=Q6vHoaVm5L1u2ZAW1fqv3Jw48gFzYVg9P0vH0VHl3GVy6quoGV"
+        
+        if(requestingMoreData) {
+            urlString += "&offset=" + String(offset)
+            offset += 1
+        }
+        
+        let url = URL(string : urlString)!
+        
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         session.configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
         let task = session.dataTask(with: url) { (data, response, error) in
@@ -47,11 +74,18 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
             } else if let data = data,
                 let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 //print(dataDictionary)
-                
+
                 // Get the dictionary from the response key
                 let responseDictionary = dataDictionary["response"] as! [String: Any]
                 // Store the returned array of dictionaries in our posts property
                 self.posts = responseDictionary["posts"] as! [[String: Any]]
+                
+                if(requestingMoreData) {
+                    self.isMoreDataLoading = false
+                    // Stop the loading indicator
+                    self.loadingMoreView!.stopAnimating()
+                }
+
                 self.tableView.reloadData()
                 self.refreshControl.endRefreshing()
                 
@@ -143,6 +177,33 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return posts.count
+    }
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Handle scroll behavior here
+        if (!isMoreDataLoading) {
+
+            // Calculate the position of one screen length before the bottom of the results
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+            
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
+                isMoreDataLoading = true
+                
+                
+                // Update position of loadingMoreView, and start loading indicator
+                let frame = CGRect(x: 0, y: tableView.contentSize.height, width: tableView.bounds.size.width, height: InfiniteScrollActivityView.defaultHeight)
+                loadingMoreView?.frame = frame
+                loadingMoreView!.startAnimating()
+                
+                fetchPictures(requestingMoreData: true)
+                
+                // ... Code to load more results ...
+            }
+        }
+        
     }
     
 }
