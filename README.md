@@ -54,7 +54,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-# Lab 2 - *Tumblr - Details Screen
+# Lab 2 - *Tumblr - Details Screen*
 
 **Tumblr - Details Screen** is a photo browsing app app using the [The Tumblr API](https://www.tumblr.com/docs/en/api/v2#posts).
 
