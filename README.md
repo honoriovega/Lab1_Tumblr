@@ -95,7 +95,7 @@ Describe any challenges encountered while building the app.
 
 ## License
 
-Copyright [1994] [Honorio Vega]
+Copyright [2018] [Honorio Vega]
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
